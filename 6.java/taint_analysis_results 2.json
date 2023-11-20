@@ -1,0 +1,89 @@
+[
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i()",
+        "taint status": "yes",
+        "taint path": "TelephonyManager.getDeviceId() -> MainActivity.v.s -> Log.i()"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i()",
+        "taint status": "yes",
+        "taint path": "TelephonyManager.getDeviceId() -> imei -> Formatter -> StringBuffer -> Log.i()"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i()",
+        "taint status": "yes",
+        "taint path": "TelephonyManager.getDeviceId() -> imei -> Pattern/Matcher -> Log.i()"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i()",
+        "taint status": "yes",
+        "taint path": "TelephonyManager.getDeviceId() -> imei -> char[] -> builtImei -> Log.i()"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "taint path": "TelephonyManager.getDeviceId() -> imei -> ByteArrayOutputStream -> outString -> Log.i()"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i()",
+        "taint status": "no",
+        "comment": "The method containing the taint flow is not called, rendering the flow inactive."
+    },
+    [
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "DataLeak.logData()",
+            "taint status": "yes",
+            "taint path": "TelephonyManager.getDeviceId() -> imei -> DataLeak -> Log.i()",
+            "condition": "counter%2 != 0"
+        },
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "NoDataLeak.logData()",
+            "taint status": "no",
+            "comment": "No sensitive data involved in NoDataLeak instances."
+        }
+    ],
+    [
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "SmsManager.sendTextMessage()",
+            "taint status": "yes",
+            "taint path": "B.mgr.getDeviceId() -> Test.method() -> SmsManager.sendTextMessage()",
+            "comment": "IMEI number sent via SMS"
+        },
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "Log.i()",
+            "taint status": "no",
+            "comment": "Logged data is not sensitive"
+        },
+    ],
+    [
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "SmsManager.sendTextMessage()",
+            "taint status": "yes",
+            "taint path": "A.getString() -> SmsManager.sendTextMessage()",
+            "comment": "IMEI number sent via SMS"
+        },
+        {
+            "taint source": "TelephonyManager.getDeviceId()",
+            "taint sink": "SmsManager.sendTextMessage()",
+            "taint status": "no",
+            "comment": "No sensitive data from B.getString()"
+        }
+    ],
+    {
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "no",
+        "comment": "No sensitive data from B.getString() is used in the SMS sending operation"
+    }
+]
