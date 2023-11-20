@@ -1,0 +1,55 @@
+[
+    {
+        "case": "Flow1",
+        "results": [
+            {
+                "taint source": "getDeviceId()",
+                "taint sink": "Log.i()",
+                "taint status": "yes",
+                "taint path": "getDeviceId() \u2192 imei \u2192 obfuscateIMEI(imei) \u2192 writeToLog(obfuscatedIMEI)"
+            },
+            {
+                "taint source": "getDeviceId()",
+                "taint sink": "Log.i()",
+                "taint status": "yes",
+                "taint path": "getDeviceId() \u2192 imei \u2192 copyIMEI(imei) \u2192 writeToLog(obfuscatedIMEI)"
+            }
+        ]
+    },
+    {
+        "case": "Flow2",
+        "results": [
+            {
+                "taint source": "User-entered password",
+                "taint sink": "Log.i()",
+                "taint status": "yes",
+                "taint path": "User input \u2192 userInputPassword \u2192 passwordCorrect boolean \u2192 Log message",
+                "comment": "not directly; due to indirect or implicit flow"
+            }
+        ]
+    },
+    {
+        "case": "Flow3",
+        "results": [
+            {
+                "taint source": "User-entered password",
+                "taint sink": "Log.i() in ClassA.leakInfo() and ClassB.leakInfo()",
+                "taint status": "yes",
+                "taint path": "User input \u2192 userInputPassword \u2192 ClassA/ClassB instantiation \u2192 Log message in leakInfo()",
+                "comment": "not directly; due to indirect or implicit flow"
+            }
+        ]
+    },
+    {
+        "case": "Flow4",
+        "results": [
+            {
+                "taint source": "User-entered username and password",
+                "taint sink": "Log.i()",
+                "taint status": "yes",
+                "taint path": "User input \u2192 username, password \u2192 lookup() method \u2192 Log messages based on verification result",
+                "comment": "not directly; due to indirect or implicit flow"
+            }
+        ]
+    }
+]

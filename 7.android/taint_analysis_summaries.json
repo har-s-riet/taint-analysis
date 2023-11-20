@@ -1,0 +1,74 @@
+[
+    {
+        "taint source": "None",
+        "taint sink": "Log.i",
+        "taint status": "no",
+        "snippet_id": "Snippet_1"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_2"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_3"
+    },
+    {
+        "taint source": "EditText fields (username, password)",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_4"
+    },
+    {
+        "taint source": "EditText field (password)",
+        "taint sink": "Log.v",
+        "taint status": "yes",
+        "snippet_id": "Snippet_5"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_6"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "snippet_id": "Snippet_7"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "snippet_id": "Snippet_8"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_9"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "Log.i in AnotherActivity",
+        "taint status": "yes",
+        "snippet_id": "Snippet_10"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "SmsManager.sendTextMessage",
+        "taint status": "yes",
+        "snippet_id": "Snippet_11"
+    },
+    {
+        "taint source": "TelephonyManager.getDeviceId",
+        "taint sink": "Log.i",
+        "taint status": "no",
+        "snippet_id": "Snippet_12"
+    }
+]
