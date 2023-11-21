@@ -9,4 +9,5 @@ Each category has two files:  1. Ground truth, GPT results (volatile), test case
 
 
 
-![Screenshot 2023-11-20 205411](https://github.com/har-s-riet/taint-analysis/assets/151479498/87a99edc-955a-4257-b43d-4b950eb84fed)
+![Screenshot 2023-11-20 205411](https://github.com/har-s-riet/taint-analysis/assets/151479498/9465d976-7743-41b1-bc92-45541b41dde0)
+
