@@ -1,0 +1,1482 @@
+[P,PN,PN,PN,PN,PN,PN,PN,P,N,P,P,P,P,P,P,P,P]: https://chat.openai.com/share/a35053bc-a74e-43fc-a944-d3b7b703b9f6
+https://chat.openai.com/share/53bd3031-2fa6-42c8-80a1-2f3327a5ad2f
+//1
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+
+public class Activity1 extends Activity {
+	public static String data1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_activity1);
+        
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49", null, data1, null, null); 
+    }    
+}
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class Activity2 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_activity2);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		Activity1.data1 = telephonyManager.getDeviceId();
+	}
+}
+
+```
+//2
+package edu.mit.icc_action_string_operations;
+
+import edu.mit.icc_action_string_operations.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei); 
+	}
+
+}
+package edu.mit.icc_action_string_operations;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		Intent i = new Intent("ignore.edu.mit.icc_action_string_operations.ACTION".substring(7));
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_action_string_operations;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_action_string_operations"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_action_string_operations.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_action_string_operations.InFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="edu.mit.icc_action_string_operations.ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_action_string_operations.IsolateActivity"
+            android:label="@string/app_name" >
+	  <intent-filter>
+	    <action android:name="edu.mit.icc_action_string_operations.EDIT" />
+	    <category android:name="android.intent.category.DEFAULT" />
+	  </intent-filter>
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+```
+//3
+package edu.mit.icc_componentname_class_constant;
+
+import edu.mit.icc_componentname_class_constant.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_componentname_class_constant;
+
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+	
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String imei = telephonyManager.getDeviceId(); 
+	
+        ComponentName comp = new ComponentName(getPackageName(), InFlowActivity.class.getName());
+        Intent i = new Intent().setComponent(comp);
+        i.putExtra("DroidBench", imei);
+	
+        startActivity(i);
+    }
+}
+package edu.mit.icc_componentname_class_constant;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+```
+//4
+package edu.mit.icc_concat_action_string;
+
+import edu.mit.icc_concat_action_string.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_concat_action_string;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		
+		Intent i = new Intent("edu.mit.icc_concat_action_string" + ".ACTION");
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_concat_action_string;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_concat_action_string"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_concat_action_string.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_concat_action_string.InFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="edu.mit.icc_concat_action_string.ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_concat_action_string.IsolateActivity"
+            android:label="@string/app_name" >
+	  <intent-filter>
+	    <action android:name="edu.mit.icc_concat_action_string.EDIT" />
+	    <category android:name="android.intent.category.DEFAULT" />
+	  </intent-filter>
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+
+```
+//5
+package edu.mit.icc_intent_component_name;
+
+import edu.mit.icc_intent_component_name.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_intent_component_name;
+
+import edu.mit.icc_intent_component_name.R;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.content.ComponentName;
+
+public class 	 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+
+		ComponentName cn = new ComponentName(this, "edu.mit.icc_intent_component_name.InFlowActivity");
+		
+		Intent i = new Intent();
+		i.setComponent(cn);
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_intent_component_name;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_intent_component_name"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_intent_component_name.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_intent_component_name.InFlowActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_intent_component_name.IsolateActivity"
+            android:label="@string/app_name" >
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+
+```
+//6
+package edu.mit.icc_intent_passed_through_api;
+
+import edu.mit.icc_intent_passed_through_api.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_intent_passed_through_api;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+
+    @Override
+	protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+		
+	TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+	String imei = telephonyManager.getDeviceId(); 
+		
+	Intent i = new Intent(this, InFlowActivity.class);
+	i.putExtra("DroidBench", imei);
+
+	List<Intent> iList = new LinkedList<Intent>();
+	iList.add(i);
+
+	Intent i2 = iList.get(0);
+		
+	startActivity(i2);
+    }
+}
+package edu.mit.icc_intent_passed_through_api;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_intent_passed_through_api"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_intent_passed_through_api.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_intent_passed_through_api.InFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="edu.mit.icc_intent_passed_through_api.ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_intent_passed_through_api.IsolateActivity"
+            android:label="@string/app_name" >
+	  <intent-filter>
+	    <action android:name="edu.mit.icc_intent_passed_through_api.EDIT" />
+	    <category android:name="android.intent.category.DEFAULT" />
+	  </intent-filter>
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+```
+//7
+package edu.mit.icc_non_constant_class_object;
+
+import edu.mit.icc_non_constant_class_object.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_non_constant_class_object;
+
+import edu.mit.icc_non_constant_class_object.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_non_constant_class_object;
+
+import edu.mit.icc_non_constant_class_object.R;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		
+		InFlowActivity act = new InFlowActivity();
+
+		Intent i = new Intent(this, act.getClass());
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_non_constant_class_object;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+```
+//8
+
+package edu.mit.icc_pass_action_string_through_api;
+
+import edu.mit.icc_pass_action_string_through_api.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_pass_action_string_through_api;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		
+		List<String> list = new LinkedList<String>();
+		list.add("edu.mit.icc_action_string_operations.ACTION");
+
+		String action = list.get(0);
+
+		Intent i = new Intent(action);
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_pass_action_string_through_api;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_pass_action_string_through_api"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_pass_action_string_through_api.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_pass_action_string_through_api.InFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="edu.mit.icc_action_string_operations.ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_pass_action_string_through_api.IsolateActivity"
+            android:label="@string/app_name" >
+	  <intent-filter>
+	    <action android:name="edu.mit.icc_action_string_operations.EDIT" />
+	    <category android:name="android.intent.category.DEFAULT" />
+	  </intent-filter>
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+
+```
+//9
+package edu.mit.icc_broadcast_programmatic_intentfilter;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class BroadcastTest extends Activity {
+    private static String ACTION = "edu.mit.icc_broadcast_programmatic_intentfilter.action";
+
+    public void onCreate(Bundle bundle) {
+    	super.onCreate(bundle);
+        BroadcastReceiver receiver = new BroadcastReceiver(){
+                public void onReceive(Context c, Intent i) {
+                    String taint = i.getStringExtra("imei");
+
+                    if (taint != null)
+                    	Log.i("DroidBench", taint); 
+                }				  
+            };
+
+        this.registerReceiver(receiver, new IntentFilter(ACTION));
+    }
+
+    public void onDestroy() {
+
+	TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+	String imei = mgr.getDeviceId(); 
+
+        Intent intent = new Intent(ACTION);
+        intent.putExtra("imei", imei);
+
+        sendBroadcast(intent);
+        super.onDestroy();
+    }
+}
+
+```
+//10
+package edu.mit.icc_component_not_in_manifest;
+
+import edu.mit.icc_component_not_in_manifest.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_component_not_in_manifest;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+package edu.mit.icc_component_not_in_manifest;
+
+import edu.mit.icc_component_not_in_manifest.R;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		
+		Intent i = new Intent(this, InFlowActivity.class);
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_component_not_in_manifest;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public class InFlowInterceptorActivity extends Activity {
+
+	InFlowActivity inflow;
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		inflow = new InFlowActivity();
+		inflow.setIntent(getIntent());
+		inflow.onCreate(savedInstanceState);
+	}
+}
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.mit.icc_component_not_in_manifest"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="edu.mit.icc_component_not_in_manifest.OutFlowActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="edu.mit.icc_component_not_in_manifest.IsolateActivity"
+            android:label="@string/app_name" >
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+</manifest>
+
+
+```
+//11
+package edu.mit.icc_event_ordering;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+    private static final String PREFS_NAME = "prefs";
+
+    @Override
+	protected void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String imei = settings.getString("imei", "");		
+
+		Log.i("DroidBench", imei);  
+
+		writePreferences();
+	}
+
+    private void writePreferences() {
+	TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+	String imei = telephonyManager.getDeviceId(); 
+	
+	SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	SharedPreferences.Editor editor = settings.edit();
+	editor.putString("imei", imei);
+	
+
+	editor.commit();
+    }
+
+}
+package edu.mit.icc_event_ordering;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class OutFlowActivity extends Activity {
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = new Intent("edu.mit.icc_event_ordering.ACTION");
+
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_event_ordering;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IsolateActivity extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+```
+//12
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class IntentSink1 extends Activity {
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_intent_sink1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		Intent intent = this.getIntent();
+		intent.putExtra("secret", imei);
+		this.setResult(RESULT_OK, intent); 
+		finish();
+    }    
+}
+
+//13
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.EditText;
+
+public class IntentSink2 extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_intent_sink2);
+    }
+
+	public void startIntent(View view){
+		EditText appName = (EditText) findViewById(R.id.name);
+		
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = tm.getDeviceId();
+        
+        Intent intent=new Intent();
+		intent.setClassName(this,appName.getText().toString());
+		intent.putExtra("id",deviceId); 
+		startActivity(intent); 
+	}
+    
+}
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.ecspride"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="de.ecspride.IntentSink2"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+```
+//14
+package lu.uni.snt.serval;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class IntentSource1 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_activity1);
+
+		Intent intent = this.getIntent();
+		intent.setAction("android.intent.action.MAIN");
+		this.startActivityForResult(intent, 1);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
+	{
+		if (requestCode == 1)
+		{
+			Bundle b = data.getExtras();
+			for (String key : b.keySet())
+			{
+				Log.i("SnT", "dump: " + b.get(key));
+			}
+		}
+		
+	}
+	
+}
+
+```
+//15
+package edu.mit.icc_service_messages;
+
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.telephony.TelephonyManager;
+import android.view.View;
+
+public class ActivityMessenger extends Activity {
+   
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+           
+            mService = new Messenger(service);
+            mBound = true;
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+           
+            mService = null;
+            mBound = false;
+        }
+    };
+
+    public void sayHello(View v) {
+        if (!mBound) return;
+
+
+    TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+    int id = Integer.parseInt(mgr.getDeviceId());   
+    
+        Message msg = Message.obtain(null, MessengerService.MSG_SAY_HELLO, id, 0);
+        try {
+            mService.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        bindService(new Intent(this, MessengerService.class), mConnection,
+            Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
+}
+
+package edu.mit.icc_service_messages;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.util.Log;
+import android.widget.Toast;
+
+public class MessengerService extends Service {
+   
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_SAY_HELLO:
+                    int tainted = msg.arg1;
+
+		    Log.i("DroidBench", "Tainted: " + tainted ); 
+
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
+        return mMessenger.getBinder();
+    }
+}
+
+```
+
+//16
+package edu.mit.shared_preferences;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+
+
+public class AnotherActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+       SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+       String imei = settings.getString("imei", "");
+       Log.i("DroidBench", imei); 
+    }
+}
+package edu.mit.shared_preferences;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {    
+    public static final String PREFS_NAME = "MyPrefsFile";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();
+
+        
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("imei", imei);
+        
+        editor.commit();
+    }
+        
+}
+
+```
+//17
+package edu.mit.to_components_share_memory;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import edu.mit.to_components_share_memory.R;
+
+public class AnotherActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        Singleton.v().s = mgr.getDeviceId();
+    }
+}
+package edu.mit.to_components_share_memory;
+
+public class Singleton {
+    private static Singleton v;
+    public String s;
+
+    public static Singleton v() {
+    if (v == null) {
+        v = new Singleton();
+    }
+    
+    return v;
+    }
+}package edu.mit.to_components_share_memory;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import edu.mit.to_components_share_memory.R;
+
+public class MainActivity extends Activity {    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+                         
+	Singleton.v().s = "";
+    }
+    
+    protected void onStop() {
+	Log.i("DroidBench", Singleton.v().s);
+    }
+    
+}
+
+```
+//18
+package edu.mit.icc_unresolvable_intent;
+
+import edu.mit.icc_unresolvable_intent.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+
+}
+package edu.mit.icc_unresolvable_intent;
+
+import java.util.Random;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class OutFlowActivity extends Activity {
+
+    private static Random rnd = new Random(System.currentTimeMillis());
+
+    String randomString() {
+        if (rnd.nextBoolean())
+            return "edu.mit.icc_unresolvable_intent.ACTION"; 
+        else
+            return "edu.mit.icc_unresolvable_intent.EDIT";
+    }
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		
+		Intent i = new Intent(randomString());
+		i.putExtra("DroidBench", imei);
+		
+		startActivity(i);
+	}
+
+}
+package edu.mit.icc_unresolvable_intent;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+public class InFlowActivity2 extends Activity 
+{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		
+		Intent i = getIntent();
+		String imei = i.getStringExtra("DroidBench");
+		Log.i("DroidBench", imei);
+	}
+	
+}
+
+```

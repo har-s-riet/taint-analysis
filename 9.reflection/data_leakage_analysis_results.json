@@ -1,0 +1,27 @@
+
+[
+  {
+    "taint source": "BaseClass.imei",
+    "taint sink": "SmsManager.sendTextMessage",
+    "taint status": "yes",
+    "taint path": "MainActivity.onCreate -> ConcreteClass.foo -> SmsManager.sendTextMessage"
+  },
+  {
+    "taint source": "TelephonyManager.getDeviceId",
+    "taint sink": "SmsManager.sendTextMessage",
+    "taint status": "yes",
+    "taint path": "MainActivity.onCreate -> TelephonyManager.getDeviceId -> BaseClass.imei -> ConcreteClass.foo -> SmsManager.sendTextMessage"
+  },
+  {
+    "taint source": "TelephonyManager.getDeviceId",
+    "taint sink": "SmsManager.sendTextMessage",
+    "taint status": "yes",
+    "taint path": "MainActivity.onCreate -> TelephonyManager.getDeviceId -> ReflectiveClass.setImei/getImei -> SmsManager.sendTextMessage"
+  },
+  {
+    "taint source": "TelephonyManager.getDeviceId",
+    "taint sink": "SmsManager.sendTextMessage",
+    "taint status": "yes",
+    "taint path": "MainActivity.onCreate -> ConcreteClass.foo -> TelephonyManager.getDeviceId -> ConcreteClass.bar -> SmsManager.sendTextMessage"
+  }
+]

@@ -1,0 +1,121 @@
+[
+    {
+        "code_snippet": "ActivityLifecycle1",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "HttpURLConnection",
+        "taint status": "yes",
+        "path": "imei -> URL -> connect()"
+    },
+    {
+        "code_snippet": "GeneralActivity and MainActivity",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "imei -> onResume()"
+    },
+    {
+        "code_snippet": "MainActivity with onSaveInstanceState and onRestoreInstanceState",
+        "taint source": "TelephonyManager.getSubscriberId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "s -> onRestoreInstanceState()"
+    },
+    {
+        "code_snippet": "MainActivity with onPause and onResume",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "imei -> onPause()"
+    },
+    {
+        "code_snippet": "MainActivity with savedInstanceState",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "path": "imei -> onSaveInstanceState -> onCreate"
+    },
+    {
+        "code_snippet": "ApplicationLifecyle1 and MainActivity",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "ApplicationLifecyle1.imei -> MainActivity.onResume()"
+    },
+    {
+        "code_snippet": "ApplicationLifecyle2",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "ApplicationLifecyle2.imei -> onLowMemory()"
+    },
+    {
+        "code_snippet": "ContentProvider and ApplicationLifecyle3",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "ContentProvider.onCreate -> ApplicationLifecyle3.onCreate"
+    },
+    {
+        "code_snippet": "MainActivity with onResume, onStop, and onLowMemory",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "no",
+        "path": "imei -> onLowMemory -> Log.i"
+    },
+    {
+        "code_snippet": "TestReceiver",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "imei -> onReceive -> SmsManager.sendTextMessage()"
+    },
+    {
+        "code_snippet": "MainActivity with MyReceiver",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.d",
+        "taint status": "yes",
+        "path": "imei -> MainActivity.onCreate -> MyReceiver.onReceive -> Log.d"
+    },
+    {
+        "code_snippet": "MainActivity, ArticleFragment, HeadlinesFragment",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "path": "HeadlinesFragment.onListItemClick -> MainActivity.onArticleSelected -> ArticleFragment.updateArticleView"
+    },
+    {
+        "code_snippet": "MyService and MainActivity",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "path": "value -> MyService.onStartCommand (second call) -> Log.i"
+    },
+    {
+        "code_snippet": "MainActivity with ExampleFragment",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "SmsManager.sendTextMessage()",
+        "taint status": "yes",
+        "path": "MainActivity.imei -> ExampleFragment.onAttach -> ExampleFragment.onActivityCreated"
+    },
+    {
+        "code_snippet": "MainActivity, ArticleFragment, HeadlinesFragment with Ipsum",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "path": "HeadlinesFragment.onListItemClick -> MainActivity.onArticleSelected -> ArticleFragment.updateArticleView"
+    },
+    {
+        "code_snippet": "MyService with Log before getDeviceId",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "no",
+        "path": "value -> MyService.onStartCommand -> Log.i"
+    },
+    {
+        "code_snippet": "MyService with Log after getDeviceId",
+        "taint source": "TelephonyManager.getDeviceId()",
+        "taint sink": "Log.i",
+        "taint status": "yes",
+        "path": "value -> MyService.onStartCommand (second call) -> Log.i"
+    }
+]

