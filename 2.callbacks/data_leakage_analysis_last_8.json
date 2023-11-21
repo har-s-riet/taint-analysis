@@ -1,0 +1,59 @@
+[
+    {
+        "taint source": "Location data (loc.getLatitude(), loc.getLongitude())",
+        "taint sink": "Log statements in onResume()",
+        "taint status": "yes",
+        "taint path": "Location data -> latitude and longtitude fields -> Logged in onResume()"
+    },
+    {
+        "taint source": "Location data (loc.getLatitude(), loc.getLongitude())",
+        "taint sink": "Log statements in onResume()",
+        "taint status": "yes",
+        "taint path": "Location data -> latitude and longtitude fields -> Logged in onResume()"
+    },
+    {
+        "taint source": "Location data in onLocationChanged method of MyLocationListener",
+        "taint sink": "Log statement in onResume method of LocationLeak3",
+        "taint status": "yes",
+        "taint path": "Location data -> setData method -> data field -> Logged in onResume()"
+    },
+    {
+        "taint source": "Device UID from TelephonyManager.getDeviceId()",
+        "taint sink": "Log statement in attachBaseContext",
+        "taint status": "yes",
+        "taint path": "Device UID -> Logged directly in attachBaseContext"
+    },
+    {
+
+        "case": "5",
+        "results": [
+            {    "taint source": "Location data in MyLocationListener1",
+                "taint sink": "None in MultiHandlers2",
+                "taint status": "no"
+            },
+            {
+                "taint source": "No sensitive data passed from MyLocationListener2",
+                "taint sink": "Log statement in MultiHandlers1",
+                "taint status": "no"
+            }
+        ]
+    },
+    {
+        "taint source": "Location data in onLocationChanged method",
+        "taint sink": "Log statements in onCreate",
+        "taint status": "no",
+        "taint path": "Location data is set in onDestroy but logged in onCreate"
+    },
+    {
+        "taint source": "IMEI number from TelephonyManager.getDeviceId()",
+        "taint sink": "SMS send operation in onActivityPaused",
+        "taint status": "yes",
+        "taint path": "IMEI number retrieved -> Stored in imei field -> Sent via SMS in onActivityPaused"
+    },
+    {
+        "taint source": "IMEI number from TelephonyManager.getDeviceId()",
+        "taint sink": "SMS send operation in onClick listener of button1",
+        "taint status": "yes",
+        "taint path": "Button click -> IMEI number retrieval -> SMS sent with IMEI number"
+    }
+]

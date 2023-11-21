@@ -1,0 +1,87 @@
+[
+    {
+        "code": "de.ecspride.AnnonymousClass1",
+        "analysis": [
+            {
+                "taint source": "Location.getLatitude()/Location.getLongitude() in onLocationChanged",
+                "taint sink": "Log.i in onResume",
+                "taint status": "yes"
+            }
+        ]
+    },
+    {
+        "code": "de.ecspride.Button1",
+        "analysis": [
+            {
+                "taint source": "TelephonyManager.getDeviceId() in onCreate",
+                "taint sink": "Toast.makeText in sendMessage",
+                "taint status": "yes"
+            },
+            {
+                "taint source": "TelephonyManager.getDeviceId() in onCreate",
+                "taint sink": "SmsManager.sendTextMessage in sendMessage",
+                "taint status": "yes"
+            }
+        ]
+    },
+    {
+        "code": "de.ecspride.Button2",
+        "analysis": [
+            {
+                "taint source": "TelephonyManager.getDeviceId() in clickOnButton3",
+                "taint sink": "SmsManager.sendTextMessage in button1 onClick",
+                "taint status": "yes"
+            },
+            {
+                "taint source": "TelephonyManager.getDeviceId() in clickOnButton3",
+                "taint sink": "Log.i in button1 onClick",
+                "taint status": "yes"
+            },
+            {
+                "taint source": "TelephonyManager.getDeviceId() in clickOnButton3",
+                "taint sink": "Log.i in clickOnButton3",
+                "taint status": "yes"
+            }
+        ]
+    },
+    {
+        "code": "de.ecspride.Button1Listener and Button2Listener",
+        "analysis": [
+            {
+                "taint source": "TelephonyManager.getDeviceId() in Button1Listener.onClick",
+                "taint sink": "SmsManager.sendTextMessage in Button2Listener.onClick",
+                "taint status": "yes"
+            },
+            {
+                "taint source": "TelephonyManager.getDeviceId() in Button1Listener.onClick",
+                "taint sink": "Log.i in Button2Listener.onClick",
+                "taint status": "yes"
+            }
+        ]
+    },
+    {
+        "code": "de.ecspride.Button4",
+        "analysis": [
+            {
+                "taint source": "TelephonyManager.getDeviceId() in onCreate",
+                "taint sink": "Toast.makeText in sendMessage",
+                "taint status": "yes"
+            },
+            {
+                "taint source": "TelephonyManager.getDeviceId() in onCreate",
+                "taint sink": "SmsManager.sendTextMessage in sendMessage",
+                "taint status": "yes"
+            }
+        ]
+    },
+    {
+        "code": "edu.mit.button_object_allocation.Button1",
+        "analysis": [
+            {
+                "taint source": "TelephonyManager.getDeviceId() in onCreate",
+                "taint sink": "Log.i in sendMessage",
+                "taint status": "no"
+            }
+        ]
+    }
+]

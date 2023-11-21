@@ -1,4 +1,5 @@
-[P,P,PPPN,PP,P,P,PP,PP,P,P,PP,PP,P,N]: https://chat.openai.com/share/8f5c8e8a-3f1c-49e7-aa08-5c918497603a
+[PP,P,PPPN,PP,P,P,PP,PP,P,P,NN,NN,P,P,N]: https://chat.openai.com/share/8f5c8e8a-3f1c-49e7-aa08-5c918497603a
+https://chat.openai.com/share/775c1a94-46b1-4e56-8916-1ae8d28e9032
 
 //1
 package de.ecspride;

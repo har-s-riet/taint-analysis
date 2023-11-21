@@ -1,5 +1,5 @@
-[P,PN,PN,PN,PN,PN,PN,PN,P,N,P,P,P,P,P,P,P,P]: 
-
+[P,PN,PN,PN,PN,PN,PN,PN,P,N,P,P,P,P,P,P,P,P]: https://chat.openai.com/share/a35053bc-a74e-43fc-a944-d3b7b703b9f6
+https://chat.openai.com/share/53bd3031-2fa6-42c8-80a1-2f3327a5ad2f
 //1
 
 package de.ecspride;
